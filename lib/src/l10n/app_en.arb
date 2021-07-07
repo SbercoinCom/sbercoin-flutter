@@ -1,0 +1,259 @@
+{
+    "addWallet": "Add wallet",
+    "@addWallet": {
+      "description": "Add wallet after the first upload"
+    },
+    "createNewWallet": "Create new wallet",
+    "@createNewWallet": {
+      "description": "Add wallet after the first ap load"
+    },
+    "importWallet": "Import wallet",
+    "@importWallet": {
+      "description": "Add wallet after the first ap load"
+    },
+    "saveSeedPhrase": "Save seed phrase",
+    "@saveSeedPhrase": {
+      "description": "Add wallet after the first ap load"
+    },
+    "seedPhraseCopied": "Seed phrase copied!",
+    "@seedPhraseCopied": {
+      "description": "Add wallet after the first ap load"
+    },
+    "undo": "Undo",
+    "@undo": {
+      "description": "Add wallet after the first ap load"
+    },
+    "copy": "Copy",
+    "@copy": {
+      "description": "Add wallet after the first ap load"
+    },
+    "next": "Next",
+    "@next": {
+      "description": "Add wallet after the first ap load"
+    },
+    "confirmSeedPhrase": "Confirm seed phrase",
+    "@confirmSeedPhrase": {
+      "description": "Add wallet after the first ap load"
+    },
+    "confirm": "Confirm",
+    "@confirm": {
+      "description": "Add wallet after the first ap load"
+    },
+    "seedPhrase": "Seed phrase",
+    "@seedPhrase": {
+      "description": "Add wallet after the first ap load"
+    },
+    "wif": "WIF",
+    "@wif": {
+      "description": "Add wallet after the first ap load"
+    },
+    "pasteHere": "Paste here",
+    "@pasteHere": {
+      "description": "Add wallet after the first ap load"
+    },
+    "warning": "Warning!",
+    "@warning": {
+      "description": "Add wallet after the first ap load"
+    },
+    "doesNotApplyToBIP39": "Your seed phrase does not apply to BIP39 standard. Probably, you created your seed phrase with other application. If you are sure in that seed phrase, please restore your wallet with WIF.",
+    "@doesNotApplyToBIP39": {
+      "description": "Add wallet after the first ap load"
+    },
+    "sbercoinComWallet": "Sbercoin.com wallet",
+    "@sbercoinComWallet": {
+      "description": "Add wallet after the first ap load"
+    },
+    "txList": "Transaction list",
+    "@txList": {
+      "description": "Add wallet after the first ap load"
+    },
+    "availableBalance": "Available balance",
+    "@availableBalance": {
+      "description": "Add wallet after the first ap load"
+    },
+    "immatureBalance": "Immature balance",
+    "@immatureBalance": {
+      "description": "Add wallet after the first ap load"
+    },
+    "addressCopied": "Address copied",
+    "@addressCopied": {
+      "description": "Add wallet after the first ap load"
+    },
+    "doYouWantToEnableFingerprint": "Do you want to enable fingerprint?",
+    "@doYouWantToEnableFingerprint": {
+      "description": "Add wallet after the first ap load"
+    },
+    "enableFingerprint": "Enable fingerprint",
+    "@enableFingerprint": {
+      "description": "Add wallet after the first ap load"
+    },
+    "skip": "Skip",
+    "@skip": {
+      "description": "Add wallet after the first ap load"
+    },
+    "to": "To",
+    "@to": {
+      "description": "Add wallet after the first ap load"
+    },
+    "value": "Value",
+    "@value": {
+      "description": "Add wallet after the first ap load"
+    },
+    "fee_greph": "Fee (Greph)",
+    "@fee_greph": {
+      "description": "Add wallet after the first ap load"
+    },
+    "gasLimit": "Gas limit",
+    "@gasLimit": {
+      "description": "Add wallet after the first ap load"
+    },
+    "gasPrice_greph_per_gas": "Gas price (Greph/gas)",
+    "@gasPrice_greph_per_gas": {
+      "description": "Add wallet after the first ap load"
+    },
+    "txSent": "Transaction sent!",
+    "@txSent": {
+      "description": "Add wallet after the first ap load"
+    },
+    "txError": "Transaction error!",
+    "@txError": {
+      "description": "Add wallet after the first ap load"
+    },
+    "changePIN": "Change PIN",
+    "@changePIN": {
+      "description": "Add wallet after the first ap load"
+    },
+    "backup": "Backup",
+    "@backup": {
+      "description": "Add wallet after the first ap load"
+    },
+    "touchID": "Touch ID",
+    "@touchID": {
+      "description": "Add wallet after the first ap load"
+    },
+    "smartContracts": "Smart contracts",
+    "@smartContracts": {
+      "description": "Add wallet after the first ap load"
+    },
+    "about": "About",
+    "@about": {
+      "description": "Add wallet after the first ap load"
+    },
+    "logout": "Logout",
+    "@logout": {
+      "description": "Add wallet after the first ap load"
+    },
+    "sentTx": "Sent transaction",
+    "@sentTx": {
+      "description": "Add wallet after the first ap load"
+    },
+    "received": "Received",
+    "@received": {
+      "description": "Add wallet after the first ap load"
+    },
+    "sentToContract": "Sent to contract",
+    "@sentToContract": {
+      "description": "Add wallet after the first ap load"
+    },
+    "gasRefunded": "Gas refuned",
+    "@gasRefunded": {
+      "description": "Add wallet after the first ap load"
+    },
+    "mined": "Mined",
+    "@mined": {
+      "description": "Add wallet after the first ap load"
+    },
+    "txDetailes": "Transaction detailes",
+    "@txDetailes": {
+      "description": "Add wallet after the first ap load"
+    },
+    "txID": "transaction ID",
+    "@txID": {
+      "description": "Add wallet after the first ap load"
+    },
+    "blockHash": "Block hash",
+    "@blockHash": {
+      "description": "Add wallet after the first ap load"
+    },
+    "blockHeight": "Block height",
+    "@blockHeight": {
+      "description": "Add wallet after the first ap load"
+    },
+    "timestamp": "Timestamp",
+    "@timestamp": {
+      "description": "Add wallet after the first ap load"
+    },
+    "amount": "Amount",
+    "@amount": {
+      "description": "Add wallet after the first ap load"
+    },
+    "copied": "Copied",
+    "@copied": {
+      "description": "Add wallet after the first ap load"
+    },
+    "your": "Your",
+    "@copied": {
+      "description": "Add wallet after the first ap load"
+    },
+    "contractAddress": "Contract address",
+    "@contractAddress": {
+      "description": "Add wallet after the first ap load"
+    },
+    "name": "Name",
+    "@name": {
+      "description": "Add wallet after the first ap load"
+    },
+    "symbol": "Symbol",
+    "@symbol": {
+      "description": "Add wallet after the first ap load"
+    },
+    "decimals": "Decimals",
+    "@decimals": {
+      "description": "Add wallet after the first ap load"
+    },
+    "createPasscode": "Please create passcode",
+    "@confirmPasscode": {
+      "description": "Add wallet after the first ap load"
+    },
+    "enterPasscode": "Please enter passcode",
+    "@enterPasscode": {
+      "description": "Add wallet after the first ap load"
+    },
+    "confirmPasscode": "Please confirm passcode",
+    "@confirmPasscode": {
+      "description": "Add wallet after the first ap load"
+    },
+    "cancel": "Cancel",
+    "@cancel": {
+      "description": "Add wallet after the first ap load"
+    },
+    "authRequired": "Authentication required",
+    "@authRequired": {
+      "description": "Add wallet after the first ap load"
+    },
+    "pleaseAuth": "Please authenticate",
+    "@pleaseAuth": {
+      "description": "Add wallet after the first ap load"
+    },
+    "aboutProject": "Sbercoin.com is a decentralized blockchain project built on Bitcoin's UTXO model, with support for Ethereum Virtual Machine based smart contracts, and secured by a proof of stake consensus model.",
+    "@aboutProject": {
+      "description": "Project description"
+    },
+    "callSmartContract": "Call smart contract",
+    "@callSmartContract": {
+      "description": "Project description"
+    },
+    "smartContractAddress": "Smart contract address",
+    "@smartContractAddress": {
+      "description": "Project description"
+    },
+    "pasteABI": "Paste ABI",
+    "@pasteABI": {
+      "description": "Project description"
+    },
+    "value_sber": "Value (SBER)",
+    "@value_sber": {
+      "description": "Project description"
+    }
+
+}
