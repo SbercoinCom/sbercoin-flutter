@@ -347,7 +347,7 @@ class SmartContractPageState extends State<SmartContractPage> {
     final address = Wallet.fromWIF(configurationService.getWIF(), CONSTANTS.sbercoinNetwork).address;
     var fee = (_feeValue*1e7).toInt();
     var totalValue = 0;
-    List<UTXO> inputs = await selectP2SHUtxos(address, 0, fee);
+    List<UTXO> inputs = await selectP2SHUtxos(context, address, 0, fee);
                 
     if (inputs.isNotEmpty) {
       final txb = new TransactionBuilder(network: CONSTANTS.sbercoinNetwork);

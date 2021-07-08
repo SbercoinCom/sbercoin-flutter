@@ -49,6 +49,9 @@ class SendTransactionState extends State<SendTransaction> {
   double _gasLimitValue = 200000;
   double _gasPriceValue = 20;
 
+  bool? addressValidator;
+  bool? valueValidator;
+
   @override
   void initState() {
     super.initState();
@@ -76,7 +79,8 @@ class SendTransactionState extends State<SendTransaction> {
         if (snapshot.hasData) {
           tokens = snapshot.data;
     return Scaffold(
-      body: Center(
+      body: SingleChildScrollView(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -89,7 +93,7 @@ class SendTransactionState extends State<SendTransaction> {
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               labelText: AppLocalizations.of(context)!.to,
-              labelStyle: addressFocusNode.hasFocus ? TextStyle(color:Color.fromRGBO(26, 159, 41, 1.0)) : TextStyle(color:Colors.grey),
+              labelStyle: (addressValidator != true) ? (addressFocusNode.hasFocus ? TextStyle(color:Color.fromRGBO(26, 159, 41, 1.0)) : TextStyle(color:Colors.grey)) : TextStyle(color:Colors.red),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Color.fromRGBO(26, 159, 41, 1.0)),
               ),
@@ -116,7 +120,7 @@ class SendTransactionState extends State<SendTransaction> {
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: AppLocalizations.of(context)!.value,
-                    labelStyle: valueFocusNode.hasFocus ? TextStyle(color:Color.fromRGBO(26, 159, 41, 1.0)) : TextStyle(color:Colors.grey),
+                    labelStyle: (valueValidator != true) ? (valueFocusNode.hasFocus ? TextStyle(color:Color.fromRGBO(26, 159, 41, 1.0)) : TextStyle(color:Colors.grey)) : TextStyle(color:Colors.red),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Color.fromRGBO(26, 159, 41, 1.0)),
                     ),
@@ -218,7 +222,7 @@ class SendTransactionState extends State<SendTransaction> {
               onPressed: () => _navigate(context),
             )
         ],),
-      ),
+      )),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color.fromRGBO(26, 159, 41, 1.0),
         onPressed: () => _navigateAndDisplaySelection(context),
@@ -232,7 +236,27 @@ class SendTransactionState extends State<SendTransaction> {
   }
 
   void _navigate(BuildContext context) async {
-    final bool? result = await Navigator.push(
+    try {
+      double.parse(valueController.text);
+      setState(() {
+        valueValidator = false;
+      });
+    }
+    catch (e) {
+      setState(() {
+        valueValidator = true;
+      });
+    } 
+    if (addressController.text.length < 34)
+      setState(() {
+        addressValidator = true;
+      });
+    else
+      setState(() {
+        addressValidator = false;
+      });
+    bool? result;
+    if (!addressValidator! && !valueValidator!) result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => MyHomePage())
     );
@@ -249,7 +273,7 @@ class SendTransactionState extends State<SendTransaction> {
     var fee = (_feeValue*1e7).toInt();
     var totalValue = 0;
     var value = (double.parse(valueController.text)*1e7).toInt();
-    List<UTXO> inputs = await selectP2SHUtxos(address, value, fee);
+    List<UTXO> inputs = await selectP2SHUtxos(context, address, value, fee);
                 
     if (inputs.isNotEmpty) {
       final txb = new TransactionBuilder(network: CONSTANTS.sbercoinNetwork);
@@ -290,7 +314,7 @@ class SendTransactionState extends State<SendTransaction> {
     //var receiverAddress = '8095636e04e686c0579ab30b0234f8aa692f7481'.padLeft(64, '0');
     var receiverAddress = HEX.encode(Base58Decoder('123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz').convert(address)).substring(2,42).padLeft(64, '0');
     print(receiverAddress);
-    List<UTXO> inputs = await selectP2SHUtxos(address, 0, fee);
+    List<UTXO> inputs = await selectP2SHUtxos(context, address, 0, fee);
                 
     if (inputs.isNotEmpty) {
       final txb = new TransactionBuilder(network: CONSTANTS.sbercoinNetwork);
@@ -418,7 +442,7 @@ class SendTransactionState extends State<SendTransaction> {
 }
 
 
-selectP2SHUtxos(address, amount, fee) async {
+selectP2SHUtxos(context, address, amount, fee) async {
     //sort the utxo
     List<UTXO> unspentTransactions = await fetchUtxos(address);
     List<UTXO> matureList = List.empty(growable: true);
@@ -448,7 +472,24 @@ selectP2SHUtxos(address, amount, fee) async {
     }
 
     if (value > findTotal) {
-        print('You do not have enough SBER to send');
+      showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: Text(AppLocalizations.of(context)!.txError),
+            content: InkWell(
+              child: Text((AppLocalizations.of(context)!.youDontHaveEnoughCoins),
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, 'OK');
+                },  
+                child: const Text('OK', style: TextStyle(color: Color.fromRGBO(26, 159, 41, 1.0)),),
+              ),
+            ],
+          ),
+        );
     }
 
     return find;

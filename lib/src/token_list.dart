@@ -64,6 +64,7 @@ class TokenList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FocusScope.of(context).unfocus();
 
     return MyHomePage(address);
   }
@@ -97,34 +98,41 @@ class TodosScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: todos.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Wrap(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(todos[index].name),
-                  Text((double.parse(todos[index].balance)/(pow(10, todos[index].decimals))).toString() + ' ' + todos[index].symbol)
-                ],
-              ),
-            ],),
-            // When a user taps the ListTile, navigate to the DetailScreen.
-            // Notice that you're not only creating a DetailScreen, you're
-            // also passing the current todo through to it.
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailScreen(todo: todos[index]),
+    if (todos.length > 0)
+      return ListView.builder(
+          itemCount: todos.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Wrap(children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(todos[index].name),
+                    Text((double.parse(todos[index].balance)/(pow(10, todos[index].decimals))).toString() + ' ' + todos[index].symbol)
+                  ],
                 ),
-              );
-            },
-          );
-        },
-        
-    );
+              ],),
+              // When a user taps the ListTile, navigate to the DetailScreen.
+              // Notice that you're not only creating a DetailScreen, you're
+              // also passing the current todo through to it.
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailScreen(todo: todos[index]),
+                  ),
+                );
+              },
+            );
+          },
+          
+      );
+    else 
+      return Center(
+        child: Text(AppLocalizations.of(context)!.youDontHaveTokens,
+          style: TextStyle(color: Colors.grey)
+        )
+      );
   }
 }
 

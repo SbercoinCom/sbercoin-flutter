@@ -12,6 +12,7 @@ class WalletInfo extends StatelessWidget{
   final walletAddress;
 
   Widget build(BuildContext context) {
+    FocusScope.of(context).unfocus();
     return new Center(child: new Column(
         children: [
           Expanded(child: 

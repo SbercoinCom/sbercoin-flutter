@@ -62,5 +62,8 @@
     "callSmartContract" : "Вызов смарт-контракта",
     "smartContractAddress" : "Адрес смарт-контракта",
     "pasteABI" : "Вставьте ABI",
-    "value_sber" : "Сумма (SBER)"
+    "value_sber" : "Сумма (SBER)",
+    "youDontHaveTokens" : "У вас нет никаких токенов",
+    "youHadNotSentTxs" : "Вы не совершали транзакций",
+    "youDontHaveEnoughCoins" : "У вас недостаточно коинов для совершения транзакции"
 }

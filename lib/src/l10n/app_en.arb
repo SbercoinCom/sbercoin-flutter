@@ -254,6 +254,18 @@
     "value_sber": "Value (SBER)",
     "@value_sber": {
       "description": "Project description"
+    },
+    "youDontHaveTokens": "You don't have any tokens",
+    "@youDontHaveTokens": {
+      "description": "Project description"
+    },
+    "youHadNotSentTxs": "You had not sent any transactions",
+    "@youHadNotSentTxs": {
+      "description": "Project description"
+    },
+    "youDontHaveEnoughCoins": "You don't have enough coins to send",
+    "@youDontHaveEnoughCoins": {
+      "description": "Project description"
     }
 
 }

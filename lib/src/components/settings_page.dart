@@ -38,6 +38,7 @@ class SettingsState extends State<Settings> {
   }
 
   Widget build(BuildContext context) {
+    FocusScope.of(context).unfocus();
     return new Center(child: new Column(
         children: [
           _tile(context, AppLocalizations.of(context)!.changePIN, Icons.password, Type.changePin),

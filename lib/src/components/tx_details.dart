@@ -18,18 +18,18 @@ Future<List<Tag>> fetchPhotos(String address) async {
 class Tag {
   final String id;
   final int confirmations;
-  final int blockHeight;
-  final String blockHash;
-  final int timestamp;
+  final int? blockHeight;
+  final String? blockHash;
+  final int? timestamp;
   final String type;
   final String amount;
 
   Tag({
     required this.id, 
     required this.confirmations, 
-    required this.blockHeight, 
-    required this.blockHash, 
-    required this.timestamp, 
+    this.blockHeight, 
+    this.blockHash, 
+    this.timestamp, 
     required this.type, 
     required this.amount
   });
@@ -103,6 +103,8 @@ class TodosScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FocusScope.of(context).unfocus();
+    if (todos.length > 0)
     return ListView.builder(
         itemCount: todos.length,
         itemBuilder: (context, index) {
@@ -154,6 +156,12 @@ class TodosScreen extends StatelessWidget {
         },
         
     );
+    else 
+      return Center(
+        child: Text(AppLocalizations.of(context)!.youHadNotSentTxs,
+          style: TextStyle(color: Colors.grey)
+        )
+      );
   }
 }
 
@@ -179,7 +187,7 @@ class DetailScreen extends StatelessWidget {
         Divider(),
         _tile(context, '${todo.blockHeight}', AppLocalizations.of(context)!.blockHeight, Icons.confirmation_number, 'block/${todo.blockHeight}'),
         Divider(),
-        _tile(context, '${DateTime.fromMillisecondsSinceEpoch(todo.timestamp * 1000)}', AppLocalizations.of(context)!.timestamp, Icons.history, null),
+        _tile(context, '${todo.timestamp!=null ? DateTime.fromMillisecondsSinceEpoch(todo.timestamp! * 1000) : '-'}', AppLocalizations.of(context)!.timestamp, Icons.history, null),
         Divider(),
         _tile(context, '${formatAmount(todo.amount)} SBER', AppLocalizations.of(context)!.amount, Icons.payments, null),
         Divider(),
