@@ -266,6 +266,30 @@
     "youDontHaveEnoughCoins": "You don't have enough coins to send",
     "@youDontHaveEnoughCoins": {
       "description": "Project description"
+    },
+    "showWif": "Show WIF",
+    "@showWif": {
+      "description": "Project description"
+    },
+    "showMnemonic": "Show seed phrase",
+    "@showMnemonic": {
+      "description": "Project description"
+    },
+    "yourWif": "Your WIF",
+    "@yourWif": {
+      "description": "Project description"
+    },
+    "yourMnemonic": "Your seed phrase",
+    "@ypurMnemonic": {
+      "description": "Project description"
+    },
+    "error": "Error",
+    "@error": {
+      "description": "Project description"
+    },
+    "cannotShowMnemonic": "Cannot show seed phrase because you had not uploaded it",
+    "@cannotShowMnemonic": {
+      "description": "Project description"
     }
 
 }

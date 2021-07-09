@@ -25,7 +25,8 @@ class WalletState extends State<Wallet> {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     Future.delayed(const Duration(milliseconds: 100));
     var configurationService = ConfigurationService(_prefs);
-    return BitcoinLibrary.Wallet.fromWIF(configurationService.getWIF(), CONSTANTS.sbercoinNetwork);
+    wallet = BitcoinLibrary.Wallet.fromWIF(configurationService.getWIF(), CONSTANTS.sbercoinNetwork);
+    return wallet;
   }
 
   @override
@@ -39,7 +40,7 @@ class WalletState extends State<Wallet> {
     return FutureBuilder<BitcoinLibrary.Wallet>(
       future: _loadWallet(),
       builder: (context, snapshot) {
-        wallet = snapshot.data!;
+        if (snapshot.hasData)
         return Container(
       child: DefaultTabController(
         length: 4,
@@ -98,6 +99,7 @@ class WalletState extends State<Wallet> {
         ),
       ),
     );
+    return Center(child: CircularProgressIndicator(color: Color.fromRGBO(26, 159, 41, 1.0),));
       }
     );
   }

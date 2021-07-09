@@ -65,5 +65,11 @@
     "value_sber" : "Сумма (SBER)",
     "youDontHaveTokens" : "У вас нет никаких токенов",
     "youHadNotSentTxs" : "Вы не совершали транзакций",
-    "youDontHaveEnoughCoins" : "У вас недостаточно коинов для совершения транзакции"
+    "youDontHaveEnoughCoins" : "У вас недостаточно коинов для совершения транзакции",
+    "showWif" : "Показать WIF",
+    "showMnemonic" : "Показать seed-фразу",
+    "yourWif" : "Ваш WIF",
+    "yourMnemonic" : "Ваша seed-фраза",
+    "error" : "Ошибка",
+    "cannotShowMnemonic" : "Невозможно отобразить seed-фразу, потому что она не была загружена"
 }
