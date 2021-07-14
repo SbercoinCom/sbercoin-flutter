@@ -1,239 +1,235 @@
 {
     "addWallet": "Add wallet",
     "@addWallet": {
-      "description": "Add wallet after the first upload"
+      "description": "AppBar title - Add wallet when the app loaded for the first time"
     },
     "createNewWallet": "Create new wallet",
     "@createNewWallet": {
-      "description": "Add wallet after the first ap load"
+      "description": "Button text - Create new wallet to add it to the app"
     },
     "importWallet": "Import wallet",
     "@importWallet": {
-      "description": "Add wallet after the first ap load"
+      "description": "Button text - Import existing wallet to the app"
     },
     "saveSeedPhrase": "Save seed phrase",
     "@saveSeedPhrase": {
-      "description": "Add wallet after the first ap load"
+      "description": "AppBar title - Save seed phrase of a new wallet"
     },
     "seedPhraseCopied": "Seed phrase copied!",
     "@seedPhraseCopied": {
-      "description": "Add wallet after the first ap load"
+      "description": "Snackbar title - when you click to copy your new seed phrase"
     },
     "undo": "Undo",
     "@undo": {
-      "description": "Add wallet after the first ap load"
+      "description": "Snackbar button - to close snackbar"
     },
     "copy": "Copy",
     "@copy": {
-      "description": "Add wallet after the first ap load"
+      "description": "Button text - Copy some information to clipboard"
     },
     "next": "Next",
     "@next": {
-      "description": "Add wallet after the first ap load"
+      "description": "Button tet - go to the next step"
     },
     "confirmSeedPhrase": "Confirm seed phrase",
     "@confirmSeedPhrase": {
-      "description": "Add wallet after the first ap load"
+      "description": "AppBar title - confirm your new seed phrase"
     },
     "confirm": "Confirm",
     "@confirm": {
-      "description": "Add wallet after the first ap load"
+      "description": "Button text - confirm some action"
     },
     "seedPhrase": "Seed phrase",
     "@seedPhrase": {
-      "description": "Add wallet after the first ap load"
+      "description": "Radio button text - import wallet with seed phrase"
     },
     "wif": "WIF",
     "@wif": {
-      "description": "Add wallet after the first ap load"
+      "description": "Radio button text - import wallet with WIF"
     },
     "pasteHere": "Paste here",
     "@pasteHere": {
-      "description": "Add wallet after the first ap load"
+      "description": "Input label"
     },
     "warning": "Warning!",
     "@warning": {
-      "description": "Add wallet after the first ap load"
+      "description": "Alertialog title"
     },
     "doesNotApplyToBIP39": "Your seed phrase does not apply to BIP39 standard. Probably, you created your seed phrase with other application. If you are sure in that seed phrase, please restore your wallet with WIF.",
     "@doesNotApplyToBIP39": {
-      "description": "Add wallet after the first ap load"
+      "description": "AlertDialog text if seed phrase does not apply to BIP39 standard"
     },
     "sbercoinComWallet": "Sbercoin.com wallet",
     "@sbercoinComWallet": {
-      "description": "Add wallet after the first ap load"
+      "description": "AppBar title - main title of the app"
     },
     "txList": "Transaction list",
     "@txList": {
-      "description": "Add wallet after the first ap load"
+      "description": "Component label - list of address transactions"
     },
     "availableBalance": "Available balance",
     "@availableBalance": {
-      "description": "Add wallet after the first ap load"
+      "description": "Component label"
     },
     "immatureBalance": "Immature balance",
     "@immatureBalance": {
-      "description": "Add wallet after the first ap load"
+      "description": "Component label"
     },
     "addressCopied": "Address copied",
     "@addressCopied": {
-      "description": "Add wallet after the first ap load"
+      "description": "Snackbar title when you copy your address"
     },
     "doYouWantToEnableFingerprint": "Do you want to enable fingerprint?",
     "@doYouWantToEnableFingerprint": {
-      "description": "Add wallet after the first ap load"
+      "description": "Component title"
     },
     "enableFingerprint": "Enable fingerprint",
     "@enableFingerprint": {
-      "description": "Add wallet after the first ap load"
+      "description": "Button text"
     },
     "skip": "Skip",
     "@skip": {
-      "description": "Add wallet after the first ap load"
+      "description": "Button text"
     },
     "to": "To",
     "@to": {
-      "description": "Add wallet after the first ap load"
+      "description": "Input label - receiver of new transaction"
     },
     "value": "Value",
     "@value": {
-      "description": "Add wallet after the first ap load"
+      "description": "Input label - value to send"
     },
     "fee_greph": "Fee (Greph)",
     "@fee_greph": {
-      "description": "Add wallet after the first ap load"
+      "description": "Switch label - fee for transaction"
     },
     "gasLimit": "Gas limit",
     "@gasLimit": {
-      "description": "Add wallet after the first ap load"
+      "description": "Switch label - gas limit for transaction"
     },
     "gasPrice_greph_per_gas": "Gas price (Greph/gas)",
     "@gasPrice_greph_per_gas": {
-      "description": "Add wallet after the first ap load"
+      "description": "Switch label - gas price for transaction"
     },
     "txSent": "Transaction sent!",
     "@txSent": {
-      "description": "Add wallet after the first ap load"
+      "description": "AlertDialog title"
     },
     "txError": "Transaction error!",
     "@txError": {
-      "description": "Add wallet after the first ap load"
+      "description": "AlertDialog title"
     },
     "changePIN": "Change PIN",
     "@changePIN": {
-      "description": "Add wallet after the first ap load"
-    },
-    "backup": "Backup",
-    "@backup": {
-      "description": "Add wallet after the first ap load"
+      "description": "ListTile text - app settings option"
     },
     "touchID": "Touch ID",
     "@touchID": {
-      "description": "Add wallet after the first ap load"
+      "description": "ListTile text - app settings option"
     },
     "smartContracts": "Smart contracts",
     "@smartContracts": {
-      "description": "Add wallet after the first ap load"
+      "description": "ListTile text - app settings option"
     },
     "about": "About",
     "@about": {
-      "description": "Add wallet after the first ap load"
+      "description": "ListTile text - app settings option"
     },
     "logout": "Logout",
     "@logout": {
-      "description": "Add wallet after the first ap load"
+      "description": "ListTile text - app settings option"
     },
     "sentTx": "Sent transaction",
     "@sentTx": {
-      "description": "Add wallet after the first ap load"
+      "description": "Transaction type in transactions list on the main page - transaction that was sent from the owner address"
     },
     "received": "Received",
     "@received": {
-      "description": "Add wallet after the first ap load"
+      "description": "Transaction type in transactions list on the main page - transaction that was received by the owner address"
     },
     "sentToContract": "Sent to contract",
     "@sentToContract": {
-      "description": "Add wallet after the first ap load"
+      "description": "Transaction type in transactions list on the main page - transaction that was sent to smart contract"
     },
     "gasRefunded": "Gas refuned",
     "@gasRefunded": {
-      "description": "Add wallet after the first ap load"
+      "description": "Transaction type in transactions list on the main page - gas that was refunded to the address after smart contract sending"
     },
     "mined": "Mined",
     "@mined": {
-      "description": "Add wallet after the first ap load"
+      "description": "Transaction type in transactions list on the main page - coinbase transaction"
     },
     "txDetailes": "Transaction detailes",
     "@txDetailes": {
-      "description": "Add wallet after the first ap load"
+      "description": "AppBar title"
     },
     "txID": "transaction ID",
     "@txID": {
-      "description": "Add wallet after the first ap load"
+      "description": "tx label text"
     },
     "blockHash": "Block hash",
     "@blockHash": {
-      "description": "Add wallet after the first ap load"
+      "description": "tx label text"
     },
     "blockHeight": "Block height",
     "@blockHeight": {
-      "description": "Add wallet after the first ap load"
+      "description": "tx label text"
     },
     "timestamp": "Timestamp",
     "@timestamp": {
-      "description": "Add wallet after the first ap load"
+      "description": "tx label text"
     },
     "amount": "Amount",
     "@amount": {
-      "description": "Add wallet after the first ap load"
+      "description": "tx label text"
     },
     "copied": "Copied",
     "@copied": {
-      "description": "Add wallet after the first ap load"
+      "description": "SnackBar text"
     },
     "your": "Your",
     "@copied": {
-      "description": "Add wallet after the first ap load"
+      "description": "AppBar text - concatenate with the token name"
     },
     "contractAddress": "Contract address",
     "@contractAddress": {
-      "description": "Add wallet after the first ap load"
+      "description": "token label text"
     },
     "name": "Name",
     "@name": {
-      "description": "Add wallet after the first ap load"
+      "description": "token label text"
     },
     "symbol": "Symbol",
     "@symbol": {
-      "description": "Add wallet after the first ap load"
+      "description": "token label text"
     },
     "decimals": "Decimals",
     "@decimals": {
-      "description": "Add wallet after the first ap load"
+      "description": "token label text"
     },
     "createPasscode": "Please create passcode",
     "@confirmPasscode": {
-      "description": "Add wallet after the first ap load"
+      "description": "Label text when you have to create a pin code"
     },
     "enterPasscode": "Please enter passcode",
     "@enterPasscode": {
-      "description": "Add wallet after the first ap load"
+      "description": "Label text when you have to enter your pin code"
     },
     "confirmPasscode": "Please confirm passcode",
     "@confirmPasscode": {
-      "description": "Add wallet after the first ap load"
+      "description": "Label text when you have to confirm your pin code"
     },
     "cancel": "Cancel",
     "@cancel": {
-      "description": "Add wallet after the first ap load"
+      "description": "Button text"
     },
     "authRequired": "Authentication required",
     "@authRequired": {
-      "description": "Add wallet after the first ap load"
+      "description": "Label text"
     },
     "pleaseAuth": "Please authenticate",
     "@pleaseAuth": {
-      "description": "Add wallet after the first ap load"
+      "description": "Label text"
     },
     "aboutProject": "Sbercoin.com is a decentralized blockchain project built on Bitcoin's UTXO model, with support for Ethereum Virtual Machine based smart contracts, and secured by a proof of stake consensus model.",
     "@aboutProject": {
@@ -241,55 +237,55 @@
     },
     "callSmartContract": "Call smart contract",
     "@callSmartContract": {
-      "description": "Project description"
+      "description": "AppBar title"
     },
     "smartContractAddress": "Smart contract address",
     "@smartContractAddress": {
-      "description": "Project description"
+      "description": "Input label"
     },
     "pasteABI": "Paste ABI",
     "@pasteABI": {
-      "description": "Project description"
+      "description": "Input label"
     },
     "value_sber": "Value (SBER)",
     "@value_sber": {
-      "description": "Project description"
+      "description": "input label"
     },
     "youDontHaveTokens": "You don't have any tokens",
     "@youDontHaveTokens": {
-      "description": "Project description"
+      "description": "label text"
     },
     "youHadNotSentTxs": "You had not sent any transactions",
     "@youHadNotSentTxs": {
-      "description": "Project description"
+      "description": "label text"
     },
     "youDontHaveEnoughCoins": "You don't have enough coins to send",
     "@youDontHaveEnoughCoins": {
-      "description": "Project description"
+      "description": "AlertDialog text"
     },
     "showWif": "Show WIF",
     "@showWif": {
-      "description": "Project description"
+      "description": "ListTile text - app settings option"
     },
     "showMnemonic": "Show seed phrase",
     "@showMnemonic": {
-      "description": "Project description"
+      "description": "ListTile text - app settings option"
     },
     "yourWif": "Your WIF",
     "@yourWif": {
-      "description": "Project description"
+      "description": "AppBar title"
     },
     "yourMnemonic": "Your seed phrase",
     "@ypurMnemonic": {
-      "description": "Project description"
+      "description": "AppBar title"
     },
     "error": "Error",
     "@error": {
-      "description": "Project description"
+      "description": "AlertDialog title"
     },
     "cannotShowMnemonic": "Cannot show seed phrase because you had not uploaded it",
     "@cannotShowMnemonic": {
-      "description": "Project description"
+      "description": "AlertDialog text"
     }
 
 }

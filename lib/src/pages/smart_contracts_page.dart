@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:base58check/base58.dart';
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
 import 'package:flutter/material.dart';
-import '/src/components/send_transaction.dart';
+import 'send_transaction_page.dart';
 import '/src/configuration_service.dart';
 import '/src/constants.dart' as CONSTANTS;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -29,11 +28,13 @@ class SmartContractPageState extends State<SmartContractPage> {
   final FocusNode addressFocusNode = FocusNode();
   final FocusNode abiFocusNode = FocusNode();
   final FocusNode valueFocusNode = FocusNode();
+
   List<String> dropdownItems = List.empty(growable: true);
   String dropdownValue = '';
   List<ABIObject> abi = List.empty(growable: true);
   List<TextEditingController> inputControllers = List.empty(growable: true);
   List<FocusNode> inputFocusNodes = List.empty(growable: true);
+
   double _feeValue = 0.003;
   double _gasLimitValue = 200000;
   double _gasPriceValue = 20;
@@ -51,205 +52,208 @@ class SmartContractPageState extends State<SmartContractPage> {
       ),
       body: SingleChildScrollView(
         child: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: TextField(
-                focusNode: addressFocusNode,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: AppLocalizations.of(context)!.smartContractAddress,
-                  labelStyle: addressFocusNode.hasFocus ? TextStyle(color:Color.fromRGBO(26, 159, 41, 1.0)) : TextStyle(color:Colors.grey),
-                  hoverColor: Color.fromRGBO(26, 159, 41, 1.0),
-                  focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color.fromRGBO(26, 159, 41, 1.0),
-                            ),)
-                ),
-                minLines: 1,
-                maxLines: 1,
-                controller: addressController,
-                cursorColor: Color.fromRGBO(26, 159, 41, 1.0),
-                onTap: () => {
-                  setState(() {
-                    FocusScope.of(context).requestFocus(addressFocusNode);
-                  })
-                },
-              )
-            ),
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: TextField(
-                focusNode: abiFocusNode,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: AppLocalizations.of(context)!.pasteABI,
-                  labelStyle: abiFocusNode.hasFocus ? TextStyle(color:Color.fromRGBO(26, 159, 41, 1.0)) : TextStyle(color:Colors.grey),
-                  hoverColor: Color.fromRGBO(26, 159, 41, 1.0),
-                  focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color.fromRGBO(26, 159, 41, 1.0),
-                            ),)
-                ),
-                minLines: 5,
-                maxLines: 5,
-                controller: abiController,
-                cursorColor: Color.fromRGBO(26, 159, 41, 1.0),
-                onTap: () => {
-                  setState(() {
-                    FocusScope.of(context).requestFocus(abiFocusNode);
-                  })
-                },
-                onChanged: (String value) => parseAbi(value),
-              )
-            ),
-            DropdownButton<String>(
-                  value: dropdownValue,
-                  icon: const Icon(Icons.arrow_downward),
-                  iconSize: 24,
-                  elevation: 16,
-                  underline: Container(
-                    height: 2,
-                  ),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      dropdownValue = newValue!;
-                    });
-                  },
-                  items: dropdownItems
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-            FutureBuilder<List<Object>?>(
-              future: _getInputsOfSelectedDropdown(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  for (int i=0; i< snapshot.data!.length; i++) {
-                    inputControllers.add(new TextEditingController());
-                    inputFocusNodes.add(new FocusNode());
-                  }
-                }
-                if (snapshot.hasData) 
-                return Column(
-                  children: [
-                    for(int i=0; i<snapshot.data!.length; i++)
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: TextField(
-                        controller: inputControllers[i],
-                        focusNode: inputFocusNodes[i],
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: (snapshot.data![i] as Map)['name'] + ' (' + (snapshot.data![i] as Map)['type'] + ')',
-                          labelStyle: inputFocusNodes[i].hasFocus ? TextStyle(color:Color.fromRGBO(26, 159, 41, 1.0)) : TextStyle(color:Colors.grey),
-                          hoverColor: Color.fromRGBO(26, 159, 41, 1.0),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color.fromRGBO(26, 159, 41, 1.0),
-                            ),)
-                        ),
-                        onTap: () => {
-                          setState(() {
-                            FocusScope.of(context).requestFocus(inputFocusNodes[i]);
-                          })
-                        },
-                      ),
-                    ),
-                    (abi[dropdownItems.indexOf(dropdownValue)].stateMutability == 'payable') ? Padding(
-                      padding: EdgeInsets.all(10),
-                      child: TextField(
-                        controller: valueController,
-                        focusNode: valueFocusNode,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: AppLocalizations.of(context)!.value_sber,
-                          labelStyle: valueFocusNode.hasFocus ? TextStyle(color:Color.fromRGBO(26, 159, 41, 1.0)) : TextStyle(color:Colors.grey),
-                          hoverColor: Color.fromRGBO(26, 159, 41, 1.0),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color.fromRGBO(26, 159, 41, 1.0),
-                            ),)
-                        ),
-                        onTap: () => {
-                          setState(() {
-                            FocusScope.of(context).requestFocus(valueFocusNode);
-                          })
-                        },
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: TextField(
+                  focusNode: addressFocusNode,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: AppLocalizations.of(context)!.smartContractAddress,
+                    labelStyle: addressFocusNode.hasFocus ? TextStyle(color:Color.fromRGBO(26, 159, 41, 1.0)) : TextStyle(color:Colors.grey),
+                    hoverColor: Color.fromRGBO(26, 159, 41, 1.0),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color.fromRGBO(26, 159, 41, 1.0),
                       )
-                     ) : Text(''),
-                    (abi[dropdownItems.indexOf(dropdownValue)].stateMutability != 'view') ? Text(AppLocalizations.of(context)!.fee_greph) : Text(''),
-          (abi[dropdownItems.indexOf(dropdownValue)].stateMutability != 'view') ? Slider(
-            value: _feeValue,
-            min: 0.001,
-            max: 0.010001,
-            divisions: 9,
-            label: _feeValue.toStringAsFixed(3),
-            activeColor: Color.fromRGBO(26, 159, 41, 1.0),
-            inactiveColor: Color.fromRGBO(26, 159, 41, 0.3),
-            onChanged: (double value) {
-              setState(() {
-                _feeValue = value;
-              });
-            },
-          ) : Text(''),
-          (abi[dropdownItems.indexOf(dropdownValue)].stateMutability != 'view') ? Text(AppLocalizations.of(context)!.gasLimit) : Text(''),
-          (abi[dropdownItems.indexOf(dropdownValue)].stateMutability != 'view') ? Slider(
-            value: _gasLimitValue,
-            min: 100000,
-            max: 1000000.1,
-            divisions: 18,
-            label: _gasLimitValue.round().toString(),
-            activeColor: Color.fromRGBO(26, 159, 41, 1.0),
-            inactiveColor: Color.fromRGBO(26, 159, 41, 0.3),
-            onChanged: (double value) {
-              setState(() {
-                _gasLimitValue = value;
-              });
-            },
-          ) : Text(''),
-          (abi[dropdownItems.indexOf(dropdownValue)].stateMutability != 'view') ? Text(AppLocalizations.of(context)!.gasPrice_greph_per_gas) : Text(''),
-          (abi[dropdownItems.indexOf(dropdownValue)].stateMutability != 'view') ? Slider(
-            value: _gasPriceValue,
-            min: 18,
-            max: 40,
-            divisions: 22,
-            label: _gasPriceValue.round().toString(),
-            activeColor: Color.fromRGBO(26, 159, 41, 1.0),
-            inactiveColor: Color.fromRGBO(26, 159, 41, 0.3),
-            onChanged: (double value) {
-              setState(() {
-                _gasPriceValue = value;
-              });
-            },
-          ) : Text(''),
-                    ElevatedButton(
-                      onPressed: () => sendTx(context, abi[dropdownItems.indexOf(dropdownValue)].stateMutability == 'view'), 
-                      child: abi[dropdownItems.indexOf(dropdownValue)].stateMutability == 'view' ? Text('Call contract') : Text('Send to contract')
                     )
-
-                  ],
-                ); else return Text('');
-              }
-            )
-          ]
+                  ),
+                  minLines: 1,
+                  maxLines: 1,
+                  controller: addressController,
+                  cursorColor: Color.fromRGBO(26, 159, 41, 1.0),
+                  onTap: () => {
+                    setState(() {
+                      FocusScope.of(context).requestFocus(addressFocusNode);
+                    })
+                  },
+                )
+              ),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: TextField(
+                  focusNode: abiFocusNode,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: AppLocalizations.of(context)!.pasteABI,
+                    labelStyle: abiFocusNode.hasFocus ? TextStyle(color:Color.fromRGBO(26, 159, 41, 1.0)) : TextStyle(color:Colors.grey),
+                    hoverColor: Color.fromRGBO(26, 159, 41, 1.0),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color.fromRGBO(26, 159, 41, 1.0),
+                      )
+                    )
+                  ),
+                  minLines: 5,
+                  maxLines: 5,
+                  controller: abiController,
+                  cursorColor: Color.fromRGBO(26, 159, 41, 1.0),
+                  onTap: () => {
+                    setState(() {
+                      FocusScope.of(context).requestFocus(abiFocusNode);
+                    })
+                  },
+                  onChanged: (String value) => parseAbi(value),
+                )
+              ),
+              DropdownButton<String>(
+                value: dropdownValue,
+                icon: const Icon(Icons.arrow_downward),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                ),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue = newValue!;
+                  });
+                },
+                items: dropdownItems.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              FutureBuilder<List<Object>?>(
+                future: _getInputsOfSelectedDropdown(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    for (int i=0; i< snapshot.data!.length; i++) {
+                      inputControllers.add(new TextEditingController());
+                      inputFocusNodes.add(new FocusNode());
+                    }
+                  }
+                  if (snapshot.hasData) 
+                    return Column(
+                      children: [
+                        for(int i=0; i<snapshot.data!.length; i++)
+                          Padding(
+                            padding: EdgeInsets.all(10),
+                            child: TextField(
+                              controller: inputControllers[i],
+                              focusNode: inputFocusNodes[i],
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: (snapshot.data![i] as Map)['name'] + ' (' + (snapshot.data![i] as Map)['type'] + ')',
+                                labelStyle: inputFocusNodes[i].hasFocus ? TextStyle(color:Color.fromRGBO(26, 159, 41, 1.0)) : TextStyle(color:Colors.grey),
+                                hoverColor: Color.fromRGBO(26, 159, 41, 1.0),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color.fromRGBO(26, 159, 41, 1.0),
+                                  )
+                                )
+                              ),
+                              onTap: () => {
+                                setState(() {
+                                  FocusScope.of(context).requestFocus(inputFocusNodes[i]);
+                                })
+                              },
+                            ),
+                          ),
+                          (abi[dropdownItems.indexOf(dropdownValue)].stateMutability == 'payable') ? Padding(
+                            padding: EdgeInsets.all(10),
+                            child: TextField(
+                              controller: valueController,
+                              focusNode: valueFocusNode,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: AppLocalizations.of(context)!.value_sber,
+                                labelStyle: valueFocusNode.hasFocus ? TextStyle(color:Color.fromRGBO(26, 159, 41, 1.0)) : TextStyle(color:Colors.grey),
+                                hoverColor: Color.fromRGBO(26, 159, 41, 1.0),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color.fromRGBO(26, 159, 41, 1.0),
+                                  )
+                                )
+                              ),
+                              onTap: () => {
+                                setState(() {
+                                  FocusScope.of(context).requestFocus(valueFocusNode);
+                                })
+                              },
+                            )
+                          ) : Text(''),
+                          (abi[dropdownItems.indexOf(dropdownValue)].stateMutability != 'view') ? Text(AppLocalizations.of(context)!.fee_greph) : Text(''),
+                          (abi[dropdownItems.indexOf(dropdownValue)].stateMutability != 'view') ? Slider(
+                            value: _feeValue,
+                            min: 0.001,
+                            max: 0.010001,
+                            divisions: 9,
+                            label: _feeValue.toStringAsFixed(3),
+                            activeColor: Color.fromRGBO(26, 159, 41, 1.0),
+                            inactiveColor: Color.fromRGBO(26, 159, 41, 0.3),
+                            onChanged: (double value) {
+                              setState(() {
+                                _feeValue = value;
+                              });
+                            },
+                          ) : Text(''),
+                          (abi[dropdownItems.indexOf(dropdownValue)].stateMutability != 'view') ? Text(AppLocalizations.of(context)!.gasLimit) : Text(''),
+                          (abi[dropdownItems.indexOf(dropdownValue)].stateMutability != 'view') ? Slider(
+                            value: _gasLimitValue,
+                            min: 100000,
+                            max: 1000000.1,
+                            divisions: 18,
+                            label: _gasLimitValue.round().toString(),
+                            activeColor: Color.fromRGBO(26, 159, 41, 1.0),
+                            inactiveColor: Color.fromRGBO(26, 159, 41, 0.3),
+                            onChanged: (double value) {
+                              setState(() {
+                                _gasLimitValue = value;
+                              });
+                            },
+                          ) : Text(''),
+                          (abi[dropdownItems.indexOf(dropdownValue)].stateMutability != 'view') ? Text(AppLocalizations.of(context)!.gasPrice_greph_per_gas) : Text(''),
+                          (abi[dropdownItems.indexOf(dropdownValue)].stateMutability != 'view') ? Slider(
+                            value: _gasPriceValue,
+                            min: 18,
+                            max: 40,
+                            divisions: 22,
+                            label: _gasPriceValue.round().toString(),
+                            activeColor: Color.fromRGBO(26, 159, 41, 1.0),
+                            inactiveColor: Color.fromRGBO(26, 159, 41, 0.3),
+                            onChanged: (double value) {
+                              setState(() {
+                                _gasPriceValue = value;
+                              });
+                            },
+                          ) : Text(''),
+                          ElevatedButton(
+                            onPressed: () => sendTx(context, abi[dropdownItems.indexOf(dropdownValue)].stateMutability == 'view'), 
+                            child: abi[dropdownItems.indexOf(dropdownValue)].stateMutability == 'view' ? Text('Call contract') : Text('Send to contract')
+                          )
+                      ],
+                    ); 
+                  else return Text('');
+                }
+              )
+            ]
+          )
         )
-      ),
       )
     );
   }
 
   void parseAbi(String responseBody) {
-    final tagObjsJson = jsonDecode(responseBody) as List;
-    List<ABIObject> tagObjs = tagObjsJson.map((tagJson) => ABIObject.fromJson(tagJson)).toList();
-    for (int i=0; i< tagObjs.length; i++) {
-      if(tagObjs[i].type == 'function') {
-        dropdownItems.add(tagObjs[i].name);
-        abi.add(tagObjs[i]);
+    final abiObjsJson = jsonDecode(responseBody) as List;
+    List<ABIObject> abiObjs = abiObjsJson.map((abiJson) => ABIObject.fromJson(abiJson)).toList();
+    for (int i=0; i< abiObjs.length; i++) {
+      if(abiObjs[i].type == 'function') {
+        dropdownItems.add(abiObjs[i].name);
+        abi.add(abiObjs[i]);
       }
     }
     setState(() {
@@ -278,7 +282,6 @@ class SmartContractPageState extends State<SmartContractPage> {
 
     var selectedIndex = dropdownItems.indexOf(dropdownValue);
     String data = encodeData();
-
 
     try {
       var uriResponse = await client.get(Uri.parse('https://explorer.sbercoin.com/api/contract/${addressController.text}/call?data=$data&sender=$sender'));
@@ -319,7 +322,6 @@ class SmartContractPageState extends State<SmartContractPage> {
         response['result'] = 'error';
       }
       
-
       if (uriResponse.statusCode == 200) {
         showDialog<String>(
           context: context,
@@ -336,8 +338,6 @@ class SmartContractPageState extends State<SmartContractPage> {
     } finally {
       client.close();
     }
-    
-
   }
 
   sendToContract() async {
@@ -345,7 +345,7 @@ class SmartContractPageState extends State<SmartContractPage> {
     var configurationService = ConfigurationService(_prefs);
     final keyPair = ECPair.fromWIF(configurationService.getWIF(), network: CONSTANTS.sbercoinNetwork);
     final address = Wallet.fromWIF(configurationService.getWIF(), CONSTANTS.sbercoinNetwork).address;
-    var fee = (_feeValue*1e7).toInt();
+    var fee = (_feeValue * CONSTANTS.SBER_DECIMALS).toInt();
     var totalValue = 0;
     List<UTXO> inputs = await selectP2SHUtxos(context, address, 0, fee);
                 
@@ -369,7 +369,7 @@ class SmartContractPageState extends State<SmartContractPage> {
       chunks[5] = 0xc2; //OP_CALL
 
       var contract =  compile(chunks);
-    txb.addOutput(contract, (double.parse(valueController.text)*1e7).toInt());
+      txb.addOutput(contract, (double.parse(valueController.text) * CONSTANTS.SBER_DECIMALS).toInt());
 
       if (totalValue > fee + _gasLimitValue.toInt()*_gasPriceValue.toInt())
         txb.addOutput(address, totalValue - fee - _gasLimitValue.toInt()*_gasPriceValue.toInt());
@@ -387,6 +387,7 @@ class SmartContractPageState extends State<SmartContractPage> {
     Map<String, String> data = {
       'rawtx': datahex,
     };
+
     var client = new Client();
 
     try {
@@ -483,7 +484,6 @@ class SmartContractPageState extends State<SmartContractPage> {
       }
     }
     return data;
-    
   }
 
   Uint8List number2Buffer(int num) {
@@ -543,10 +543,5 @@ class ABIObject {
       stateMutability: json['stateMutability'] as String,
       type: json['type'] as String,
       );
-  }
-
-  @override
-  String toString() {
-    return '{ ${this.name}, ${this.type}, ${this.inputs} }';
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'wallet_import_page.dart';
 import 'wallet_create_page.dart';
 

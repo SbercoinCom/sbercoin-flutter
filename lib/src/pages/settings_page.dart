@@ -1,16 +1,13 @@
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../main.dart';
-import '../configuration_service.dart';
-import 'about.dart';
-import 'pin.dart';
+import 'intro_page.dart';
+import '/src/configuration_service.dart';
+import 'about_page.dart';
+import 'screen_lock_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import 'smartContractsPage.dart';
+import 'smart_contracts_page.dart';
 
 enum Type { changePin, touchId, smartContracts, showWIF, showMnemonic, about, logout }
 
@@ -34,20 +31,19 @@ class SettingsState extends State<Settings> {
     super.initState();
     _getAuthStatus();
     _getFingerprint().whenComplete((){
-          setState(() {});
-       });
+      setState(() {});
+    });
   }
 
   Widget build(BuildContext context) {
     FocusScope.of(context).unfocus();
-    return new Center(child: new Column(
+    return Center(
+      child: Column(
         children: [
           _tile(context, AppLocalizations.of(context)!.changePIN, Icons.password, Type.changePin),
-          //Divider(),
-          //_tile(context, AppLocalizations.of(context)!.backup, Icons.file_download, Type.backup),
           if (_isLocalAuthAvailable) Divider(),
           if (_isLocalAuthAvailable) Row(
-            children:  <Widget>[
+            children: <Widget>[
               Expanded(
                 child: _tile(context, AppLocalizations.of(context)!.touchID, Icons.fingerprint, Type.touchId),
               ),
@@ -58,7 +54,6 @@ class SettingsState extends State<Settings> {
                   _setFingerprint(value);
                   setState(() {
                     _isFingerprintEnabled = value;
-                    print(value);
                   });
                 }
               ),
@@ -76,18 +71,18 @@ class SettingsState extends State<Settings> {
           _tile(context, AppLocalizations.of(context)!.logout, Icons.logout, Type.logout),
           Divider(),
         ]
-    ));
-
+      )
+    );
   }
 
-  _getFingerprint() async{ // change return type to bool
+  _getFingerprint() async{
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     var configurationService = ConfigurationService(_prefs);
     _isFingerprintEnabled = configurationService.getFingerprint();
     Future.delayed(const Duration(milliseconds: 100));
   }
 
-  void _setFingerprint(bool value) async{ // change return type to bool
+  void _setFingerprint(bool value) async{
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     var configurationService = ConfigurationService(_prefs);
     configurationService.setFingerprint(value);
@@ -102,7 +97,6 @@ ListTile _tile(BuildContext context, String title, IconData icon, Type type) => 
       fontSize: 15,
     )
   ),
-  //subtitle: Text(subtitle),
   leading: Icon(
     icon,
     color: Color.fromRGBO(26, 159, 41, 1.0),
@@ -112,15 +106,13 @@ ListTile _tile(BuildContext context, String title, IconData icon, Type type) => 
       case Type.logout: return logout(context);
       case Type.changePin: return changePin(context);
       case Type.touchId:
-        // TODO: Handle this case.
         break;
       case Type.smartContracts: return smartContacts(context);
       case Type.about: return about(context);
       case Type.showWIF: return showWIF(context);
       case Type.showMnemonic: return showMnemonic(context);
     }
-  }
-  
+  } 
 );
 
 logout(BuildContext context) async {
@@ -131,7 +123,7 @@ logout(BuildContext context) async {
   configurationService.setMnemonic(null);
   configurationService.setupDone(false);
   Navigator.pushReplacement(context,
-    MaterialPageRoute(builder: (BuildContext ctx) => Login())
+    MaterialPageRoute(builder: (BuildContext ctx) => IntroPage())
   );
 }
 
@@ -140,7 +132,7 @@ changePin(BuildContext context) async {
   var configurationService = ConfigurationService(prefs);
   configurationService.setPIN(null);
   Navigator.pushReplacement(context,
-    MaterialPageRoute(builder: (BuildContext ctx) => MyHomePage())
+    MaterialPageRoute(builder: (BuildContext ctx) => ScreenLockPage())
   );
 }
 
@@ -158,51 +150,49 @@ about(BuildContext context) async {
 
 showWIF(BuildContext context) async {
   final bool result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MyHomePage())
-    );
+    context,
+    MaterialPageRoute(builder: (context) => ScreenLockPage())
+  );
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var configurationService = ConfigurationService(prefs);
   String? wif = configurationService.getWIF();
 
   if (result == true) 
     showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: Text(AppLocalizations.of(context)!.yourWif),
-            content: InkWell(
-              child: Text(
-                wif.toString(),
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Clipboard.setData(new ClipboardData(text: '$wif'));
-                  final snackBar = SnackBar(
-                    content: Text(AppLocalizations.of(context)!.copied),
-                    action: SnackBarAction(
-                      label: AppLocalizations.of(context)!.undo,
-                      textColor: Color.fromRGBO(26, 159, 41, 1.0),
-                      onPressed: () {},
-                    ),
-                  );
-                  // Find the ScaffoldMessenger in the widget tree
-                  // and use it to show a SnackBar.
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                },  
-                child: Text(AppLocalizations.of(context)!.copy, style: TextStyle(color: Color.fromRGBO(26, 159, 41, 1.0)),),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, 'OK');
-                },  
-                child: const Text('OK', style: TextStyle(color: Color.fromRGBO(26, 159, 41, 1.0)),),
-              ),
-            ],
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.yourWif),
+        content: InkWell(
+          child: Text(
+            wif.toString(),
           ),
-        );
-  
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Clipboard.setData(new ClipboardData(text: '$wif'));
+              final snackBar = SnackBar(
+                content: Text(AppLocalizations.of(context)!.copied),
+                action: SnackBarAction(
+                  label: AppLocalizations.of(context)!.undo,
+                  textColor: Color.fromRGBO(26, 159, 41, 1.0),
+                  onPressed: () {},
+                ),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },  
+            child: Text(AppLocalizations.of(context)!.copy, style: TextStyle(color: Color.fromRGBO(26, 159, 41, 1.0)),),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, 'OK');
+            },  
+            child: const Text('OK', style: TextStyle(color: Color.fromRGBO(26, 159, 41, 1.0)),),
+          ),
+        ],
+      ),
+    ); 
+
 }
 
 
@@ -215,65 +205,62 @@ showMnemonic(BuildContext context) async {
   if (mnemonic != null && mnemonic != '')
     result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MyHomePage())
+      MaterialPageRoute(builder: (context) => ScreenLockPage())
     );
   else {
     showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: Text(AppLocalizations.of(context)!.error),
-            content: InkWell(
-              child: Text(AppLocalizations.of(context)!.cannotShowMnemonic),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, 'OK');
-                },  
-                child: const Text('OK', style: TextStyle(color: Color.fromRGBO(26, 159, 41, 1.0)),),
-              ),
-            ],
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.error),
+        content: InkWell(
+          child: Text(AppLocalizations.of(context)!.cannotShowMnemonic),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, 'OK');
+            },  
+            child: const Text('OK', style: TextStyle(color: Color.fromRGBO(26, 159, 41, 1.0))),
           ),
-        );
-
+        ],
+      ),
+    );
   }
 
   if (result == true) 
     showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: Text(AppLocalizations.of(context)!.yourMnemonic),
-            content: InkWell(
-              child: Text(
-                mnemonic.toString(),
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Clipboard.setData(new ClipboardData(text: '$mnemonic'));
-                  final snackBar = SnackBar(
-                    content: Text(AppLocalizations.of(context)!.copied),
-                    action: SnackBarAction(
-                      label: AppLocalizations.of(context)!.undo,
-                      textColor: Color.fromRGBO(26, 159, 41, 1.0),
-                      onPressed: () {},
-                    ),
-                  );
-                  // Find the ScaffoldMessenger in the widget tree
-                  // and use it to show a SnackBar.
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                },  
-                child: Text(AppLocalizations.of(context)!.copy, style: TextStyle(color: Color.fromRGBO(26, 159, 41, 1.0)),),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, 'OK');
-                },  
-                child: const Text('OK', style: TextStyle(color: Color.fromRGBO(26, 159, 41, 1.0)),),
-              ),
-            ],
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.yourMnemonic),
+        content: InkWell(
+          child: Text(
+            mnemonic.toString(),
           ),
-        );
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Clipboard.setData(new ClipboardData(text: '$mnemonic'));
+              final snackBar = SnackBar(
+                content: Text(AppLocalizations.of(context)!.copied),
+                action: SnackBarAction(
+                  label: AppLocalizations.of(context)!.undo,
+                  textColor: Color.fromRGBO(26, 159, 41, 1.0),
+                  onPressed: () {},
+                ),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },  
+            child: Text(AppLocalizations.of(context)!.copy, style: TextStyle(color: Color.fromRGBO(26, 159, 41, 1.0)),),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, 'OK');
+            },  
+            child: const Text('OK', style: TextStyle(color: Color.fromRGBO(26, 159, 41, 1.0)),),
+          ),
+        ],
+      ),
+    );
   
 }

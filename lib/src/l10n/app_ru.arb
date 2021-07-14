@@ -30,7 +30,6 @@
     "txSent" : "Транзакция отправлена!",
     "txError" : "Ошибка транзакции",
     "changePIN" : "Сменить PIN-код",
-    "backup" : "Сделать бэкап",
     "touchID" : "Touch ID",
     "smartContracts" : "Смарт-контракты",
     "about" : "О проекте",

@@ -1,14 +1,13 @@
 import 'dart:math';
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:shared_preferences/shared_preferences.dart';
-import './src/configuration_service.dart';
+import '/src/configuration_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'src/components/pin.dart' as Test;
-import 'src/constants.dart' as CONSTANTS;
+import 'screen_lock_page.dart';
+import '/src/constants.dart' as CONSTANTS;
 
 class CreateSeed extends StatelessWidget {
 
@@ -17,9 +16,7 @@ class CreateSeed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    var mnemonic = bip39.generateMnemonic();
-    this.mnemonicCode = mnemonic;
-    print(mnemonic);
+    this.mnemonicCode = bip39.generateMnemonic();
 
     return Scaffold(
       appBar: AppBar(
@@ -31,7 +28,7 @@ class CreateSeed extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.all(10),
-              child: Text('$mnemonic',
+              child: Text('${this.mnemonicCode}',
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -40,19 +37,16 @@ class CreateSeed extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Clipboard.setData(new ClipboardData(text: '$mnemonic'));
+                    Clipboard.setData(new ClipboardData(text: '${this.mnemonicCode}'));
                     final snackBar = SnackBar(
                       content: Text(AppLocalizations.of(context)!.seedPhraseCopied),
                       action: SnackBarAction(
                         label: AppLocalizations.of(context)!.undo,
                         textColor: Color.fromRGBO(26, 159, 41, 1.0),
                         onPressed: () {
-                          // Some code to undo the change.
                         },
                       ),
                     );
-                    // Find the ScaffoldMessenger in the widget tree
-                    // and use it to show a SnackBar.
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                   child: Text(AppLocalizations.of(context)!.copy),
@@ -70,7 +64,8 @@ class CreateSeed extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => ConfirmSeed(mnemonic: mnemonicCode),
-                      ));
+                      )
+                    );
                   },
                 )
               ],
@@ -159,7 +154,7 @@ class _ConfirmSeedState extends State<ConfirmSeed> {
                   (Set<MaterialState> states) {
                     if (!states.contains(MaterialState.disabled))
                       return Color.fromRGBO(26, 159, 41, 1.0);
-                    return Colors.grey; // Use the component's default.
+                    return Colors.grey;
                   },
                 ),
               ),
@@ -169,10 +164,10 @@ class _ConfirmSeedState extends State<ConfirmSeed> {
                 configurationService.setupDone(true);
                 configurationService.setMnemonic(mnemonic);
                 var seed = bip39.mnemonicToSeed(mnemonic);
-                  var hdWallet = new HDWallet.fromSeed(seed, network: CONSTANTS.sbercoinNetwork);
+                var hdWallet = new HDWallet.fromSeed(seed, network: CONSTANTS.sbercoinNetwork);
                 configurationService.setWIF(hdWallet.wif);
                 Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (BuildContext ctx) => Test.MyHomePage())
+                  MaterialPageRoute(builder: (BuildContext ctx) => ScreenLockPage())
                 );
               } : null,
             )
@@ -194,7 +189,6 @@ class MultiSelectChip extends StatefulWidget {
 }
 
 class _MultiSelectChipState extends State<MultiSelectChip> {
-  // String selectedChoice = "";
   List<String> selectedChoices = List.empty(growable: true);
 
   _buildChoiceList() {
@@ -209,8 +203,8 @@ class _MultiSelectChipState extends State<MultiSelectChip> {
           onSelected: (selected) {
             setState(() {
               selectedChoices.contains(item)
-                  ? selectedChoices.remove(item)
-                  : selectedChoices.add(item);
+                ? selectedChoices.remove(item)
+                : selectedChoices.add(item);
               widget.onSelectionChanged(selectedChoices);
             });
           },
