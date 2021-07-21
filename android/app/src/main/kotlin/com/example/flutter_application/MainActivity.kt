@@ -1,4 +1,4 @@
-package com.example.flutter_application
+package com.sbercoin.wallet
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
