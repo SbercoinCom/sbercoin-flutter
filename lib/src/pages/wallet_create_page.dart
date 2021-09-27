@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:bitcoin_flutter/bitcoin_flutter.dart';
+import 'package:coinslib/coinslib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:bip39/bip39.dart' as bip39;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '/src/configuration_service.dart';
 import 'screen_lock_page.dart';
-import 'package:bitcoin_flutter/bitcoin_flutter.dart';
+import 'package:coinslib/coinslib.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import '../constants.dart' as CONSTANTS;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

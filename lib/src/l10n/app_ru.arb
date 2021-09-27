@@ -70,5 +70,12 @@
     "yourWif" : "Ваш WIF",
     "yourMnemonic" : "Ваша seed-фраза",
     "error" : "Ошибка",
-    "cannotShowMnemonic" : "Невозможно отобразить seed-фразу, потому что она не была загружена"
+    "cannotShowMnemonic" : "Невозможно отобразить seed-фразу, потому что она не была загружена",
+    "youDontDelegateCoins": "У вас нет активного делегирования",
+    "superstakerAddress": "Адрес суперстейкера",
+    "superstakerFee": "Комиссия суперстейкера",
+    "fee": "Комиссия",
+    "superstaker": "Суперстейкер",
+    "removeDelegation": "Удалить делегирование",
+    "delegateCoins": "Делегировать коины"
 }

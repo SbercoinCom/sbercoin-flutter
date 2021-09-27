@@ -11,7 +11,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  bitcoin_flutter: ^2.0.2
   http: ^0.13.3
   shared_preferences: ^2.0.6
   qr_flutter: ^4.0.0
@@ -19,15 +18,17 @@ dependencies:
   local_auth: ^1.1.6
   qr_code_scanner: ^0.5.1
   flutter_screen_lock: ^4.0.4+1
-  hex: ^0.1.2
-  base58check: ^1.0.1
+  hex: ^0.2.0
+  base58check: ^2.0.0
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0
-  keccak: ^1.0.3
+  crypto: ^3.0.0
+  coinslib: ^3.0.1
+  web3dart: ^2.3.1
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.8.1
+  flutter_launcher_icons: ^0.9.2
   flutter_test:
     sdk: flutter
 

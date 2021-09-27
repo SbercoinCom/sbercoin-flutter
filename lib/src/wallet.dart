@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:bitcoin_flutter/bitcoin_flutter.dart' as BitcoinLibrary;
+import 'package:coinslib/coinslib.dart' as BitcoinLibrary;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'configuration_service.dart';
 import 'components/address_info.dart';
+import 'pages/delegation_page.dart';
 import 'pages/send_transaction_page.dart';
 import 'pages/settings_page.dart';
 import 'components/address_transaction_list.dart';
@@ -23,7 +24,7 @@ class WalletState extends State<Wallet> {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     Future.delayed(const Duration(milliseconds: 100));
     var configurationService = ConfigurationService(_prefs);
-    wallet = BitcoinLibrary.Wallet.fromWIF(configurationService.getWIF(), CONSTANTS.sbercoinNetwork);
+    wallet = BitcoinLibrary.Wallet.fromWIF(configurationService.getWIF()!, CONSTANTS.sbercoinNetwork);
     return wallet;
   }
 
@@ -41,7 +42,7 @@ class WalletState extends State<Wallet> {
         if (snapshot.hasData)
           return Container(
             child: DefaultTabController(
-              length: 4,
+              length: 5,
               child: Scaffold(
                 appBar: AppBar(
                   bottom: TabBar(
@@ -49,6 +50,7 @@ class WalletState extends State<Wallet> {
                       Tab(icon: Icon(Icons.account_balance)),
                       Tab(icon: Icon(Icons.monetization_on)),
                       Tab(icon: Icon(Icons.payments)),
+                      Tab(icon: Icon(Icons.savings)),
                       Tab(icon: Icon(Icons.settings)),
                     ],
                   ),
@@ -59,10 +61,7 @@ class WalletState extends State<Wallet> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          flex: 3,
-                          child: WalletInfo(walletAddress: wallet.address),
-                        ),
+                        WalletInfo(walletAddress: wallet.address),
                         Divider(
                           height: 10,
                           thickness: 3,
@@ -78,15 +77,15 @@ class WalletState extends State<Wallet> {
                           height: 30.0, 
                         ),
                         Expanded(
-                          flex: 6,
                           child: Container(
-                            child: TxsListPage(wallet.address),
+                            child: TxsListPage(wallet.address!),
                           ),
                         ),
                       ],
                     ),
-                    TokenList(wallet.address),
-                    SendTransaction(wallet.address),
+                    TokenList(wallet.address!),
+                    SendTransaction(wallet.address!),
+                    Delegation(wallet.address!),
                     Settings(),
                   ]
                 )

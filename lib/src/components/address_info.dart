@@ -48,7 +48,6 @@ class AddressInfo {
   }
 }
 
-
 class WalletInfoState extends State<WalletInfo> {
 
   late Future<AddressInfo> addressInfo;
@@ -61,14 +60,12 @@ class WalletInfoState extends State<WalletInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return Center(
         child: FutureBuilder<AddressInfo>(
           future: addressInfo,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Container(
-                child: Column(
+              return Column(
                   children: [   
                     Padding(
                       padding: EdgeInsets.only(top: 16.0),
@@ -147,7 +144,7 @@ class WalletInfoState extends State<WalletInfo> {
                       ],
                     )
                   ]
-                )
+                
               );
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
@@ -156,7 +153,6 @@ class WalletInfoState extends State<WalletInfo> {
             return CircularProgressIndicator(color:Color.fromRGBO(26, 159, 41, 1.0),);
           },
         ),
-      ),
     );
   }
 }

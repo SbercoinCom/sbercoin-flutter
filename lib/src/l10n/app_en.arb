@@ -286,6 +286,34 @@
     "cannotShowMnemonic": "Cannot show seed phrase because you had not uploaded it",
     "@cannotShowMnemonic": {
       "description": "AlertDialog text"
+    },
+    "youDontDelegateCoins": "You don't have active delegation",
+    "@youDontDelegateCoins": {
+      "description": "Info text"
+    },
+    "superstakerAddress": "Superstaker address",
+    "@superstakerAddress": {
+      "description": "label text"
+    },
+    "superstakerFee": "Superstaker fee",
+    "@superstakerFee": {
+      "description": "label text"
+    },
+    "fee": "Fee",
+    "@fee": {
+      "description": "label text"
+    },
+    "superstaker": "SuperStaker",
+    "@superstaker": {
+      "description": "label text"
+    },
+    "removeDelegation": "Remove Delegation",
+    "@removeDelegation": {
+      "description": "label text"
+    },
+    "delegateCoins": "Delegate Coins",
+    "@delegateCoins": {
+      "description": "label text"
     }
 
 }

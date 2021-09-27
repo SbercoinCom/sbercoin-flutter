@@ -1,19 +1,18 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:base58check/base58.dart';
-import 'package:bitcoin_flutter/bitcoin_flutter.dart';
+import 'package:coinslib/coinslib.dart';
 import 'package:flutter/material.dart';
-import 'send_transaction_page.dart';
 import '/src/configuration_service.dart';
 import '/src/constants.dart' as CONSTANTS;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart';
-import 'package:keccak/keccak.dart';
+import 'package:web3dart/src/crypto/keccak.dart';
 import 'package:hex/hex.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:bitcoin_flutter/src/utils/constants/op.dart';
-import 'package:bitcoin_flutter/src/utils/script.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:coinslib/src/utils/constants/op.dart';
+import 'package:coinslib/src/utils/script.dart';
+import '/src/components/tx_functions.dart';
 
 class SmartContractPage extends StatefulWidget {
   @override
@@ -276,8 +275,8 @@ class SmartContractPageState extends State<SmartContractPage> {
   callViewFunction() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     var configurationService = ConfigurationService(_prefs);
-    Wallet wallet =  Wallet.fromWIF(configurationService.getWIF(), CONSTANTS.sbercoinNetwork);
-    String sender = HEX.encode(Base58Decoder('123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz').convert(wallet.address)).substring(2,42);
+    Wallet wallet =  Wallet.fromWIF(configurationService.getWIF()!, CONSTANTS.sbercoinNetwork);
+    String sender = HEX.encode(Base58Decoder('123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz').convert(wallet.address!)).substring(2,42);
     var client = new Client();
 
     var selectedIndex = dropdownItems.indexOf(dropdownValue);
@@ -343,9 +342,9 @@ class SmartContractPageState extends State<SmartContractPage> {
   sendToContract() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     var configurationService = ConfigurationService(_prefs);
-    final keyPair = ECPair.fromWIF(configurationService.getWIF(), network: CONSTANTS.sbercoinNetwork);
-    final address = Wallet.fromWIF(configurationService.getWIF(), CONSTANTS.sbercoinNetwork).address;
-    var fee = (_feeValue * CONSTANTS.SBER_DECIMALS).toInt();
+    final keyPair = ECPair.fromWIF(configurationService.getWIF()!, network: CONSTANTS.sbercoinNetwork);
+    final address = Wallet.fromWIF(configurationService.getWIF()!, CONSTANTS.sbercoinNetwork).address;
+    var fee = (_feeValue * CONSTANTS.SBER_DECIMALS).toInt() + _gasLimitValue.toInt()*_gasPriceValue.toInt();
     var totalValue = 0;
     List<UTXO> inputs = await selectP2SHUtxos(context, address, 0, fee);
                 
@@ -371,62 +370,16 @@ class SmartContractPageState extends State<SmartContractPage> {
       var contract =  compile(chunks);
       txb.addOutput(contract, (double.parse(valueController.text) * CONSTANTS.SBER_DECIMALS).toInt());
 
-      if (totalValue > fee + _gasLimitValue.toInt()*_gasPriceValue.toInt())
-        txb.addOutput(address, totalValue - fee - _gasLimitValue.toInt()*_gasPriceValue.toInt());
+      if (totalValue > fee)
+        txb.addOutput(address, totalValue - fee);
 
       for (var i = 0; i < inputs.length; i++) {
         txb.sign(vin: i, keyPair: keyPair);
       }
 
-      _broadcastTx(txb.build().toHex());
+      broadcastTx(context, txb.build().toHex());
     }
 
-  }
-
-  void _broadcastTx(String datahex) async {
-    Map<String, String> data = {
-      'rawtx': datahex,
-    };
-
-    var client = new Client();
-
-    try {
-      var uriResponse = await client.post(Uri.parse('https://explorer.sbercoin.com/api/tx/send'),
-        body: data);
-      var res = HttpResponse.fromJson(jsonDecode(uriResponse.body));
-      if (uriResponse.statusCode == 200) {
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: res.getStatus() == 0 ? Text(AppLocalizations.of(context)!.txSent) : Text(AppLocalizations.of(context)!.txError),
-            content: InkWell(
-              child: Text(
-                res.getTxResult(),
-                style: TextStyle(decoration: TextDecoration.underline),
-              ),
-              onTap:res.getStatus() == 0 ? () async {
-                var url = 'https://explorer.sbercoin.com/tx/${res.getTxResult()}';
-                if (await canLaunch(url)) {
-                  await launch(
-                    url,
-                  );
-                }
-              } : null,
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, 'OK');
-                },  
-                child: const Text('OK', style: TextStyle(color: Color.fromRGBO(26, 159, 41, 1.0)),),
-              ),
-            ],
-          ),
-        );
-      }
-    } finally {
-      client.close();
-    }
   }
 
   String encodeData() {
@@ -486,28 +439,6 @@ class SmartContractPageState extends State<SmartContractPage> {
     return data;
   }
 
-  Uint8List number2Buffer(int num) {
-    List<int> buffer = List.empty(growable: true);
-    var neg = (num < 0);
-    num = num.abs();
-
-    while(num > 0) {
-        buffer.add(num & 0xff);
-        num = num >> 8;
-    }
-
-    var top = buffer[buffer.length - 1];
-    if (top & 0x80 != 0x00) {
-        buffer[buffer.length] = neg ? 0x80 : 0x00;
-    }
-    else if (neg) {
-        buffer[buffer.length - 1] = top | 0x80;
-    }
-    return Uint8List.fromList(buffer);
-  }
-
-  
-
   String getMethodId() {
     var selectedIndex = dropdownItems.indexOf(dropdownValue);
     var typeList = [];
@@ -516,7 +447,7 @@ class SmartContractPageState extends State<SmartContractPage> {
       typeList.add((abi[selectedIndex].inputs![i] as Map)['type']);
     }
     sign = abi[selectedIndex].name + '(' + typeList.join(',') + ')';
-    return HEX.encode(keccak(Uint8List.fromList(sign.codeUnits))).substring(0,8);
+    return HEX.encode(keccak256(Uint8List.fromList(sign.codeUnits))).substring(0,8);
   }
 }
 
