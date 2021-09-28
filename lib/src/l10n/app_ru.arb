@@ -24,7 +24,7 @@
     "skip" : "Пропустить",
     "to" : "Получатель",
     "value" : "Сумма",
-    "fee_greph" : "Комиссия (Greph)",
+    "fee_greph" : "Комиссия (SBER)",
     "gasLimit" : "Лимит газа",
     "gasPrice_greph_per_gas" : "Цена газа (Greph/gas)",
     "txSent" : "Транзакция отправлена!",

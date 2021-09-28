@@ -99,7 +99,7 @@
     "@value": {
       "description": "Input label - value to send"
     },
-    "fee_greph": "Fee (Greph)",
+    "fee_greph": "Fee (SBER)",
     "@fee_greph": {
       "description": "Switch label - fee for transaction"
     },

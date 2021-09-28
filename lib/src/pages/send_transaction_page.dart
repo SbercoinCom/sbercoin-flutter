@@ -40,8 +40,8 @@ class SendTransactionState extends State<SendTransaction> {
 
   FocusNode addressFocusNode = new FocusNode();
   FocusNode valueFocusNode = new FocusNode();
-  String dropdownValue = 'SBER';
-  List<String> dropdownItems = List.filled(1, 'SBER', growable: true);
+  late String dropdownValue;
+  Map<String, String> dropdownItems = new Map();//List.filled(1, 'SBER', growable: true);
 
   late List<TokenList.Token>? tokens;
 
@@ -56,6 +56,8 @@ class SendTransactionState extends State<SendTransaction> {
     super.initState();
     addressController = TextEditingController(text: inputAddress);
     valueController = TextEditingController(text: inputValue);
+    dropdownItems['SBER'] = 'SBER';
+    dropdownValue = 'SBER';
   }
 
   void _requestValueFocus(){
@@ -111,7 +113,6 @@ class SendTransactionState extends State<SendTransaction> {
                       child: Row(
                         children: <Widget>[
                           Expanded(
-                            flex: 2,
                             child: TextField(
                               focusNode: valueFocusNode,
                               decoration: InputDecoration(
@@ -133,7 +134,8 @@ class SendTransactionState extends State<SendTransaction> {
                               ],
                             ),
                           ),
-                          Expanded(
+                          Padding(
+                            padding: EdgeInsets.only(left: 15.0),
                             child: Center(
                               child: DropdownButton<String>(
                                 value: dropdownValue,
@@ -148,12 +150,19 @@ class SendTransactionState extends State<SendTransaction> {
                                     dropdownValue = newValue!;
                                   });
                                 },
-                                items: dropdownItems.map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
+                                items: dropdownItems.entries.map((item) {
+                                  var temp = Map();
+                                  temp.addAll(dropdownItems);
+                                  temp.remove(item.key);
+                                  var isTokenListHasDuplicateSymbols = temp.containsValue(item.value);
+                                  return DropdownMenuItem(
+                                  value: item.key, 
+                                  child: Text(
+                                    item.value + (
+                                      (item.key != 'SBER' && isTokenListHasDuplicateSymbols) ? (' (' + item.key.substring(0, 5) + '...)') : ''
+                                    )
+                                  )
+                                );}).toList(),
                               )
                             )
                           )
@@ -308,10 +317,10 @@ class SendTransactionState extends State<SendTransaction> {
     }
   }
 
-  void _buildTokenTransferTx(String token) async {
+  void _buildTokenTransferTx(String tokenAddress) async {
     var index;
     for (int i = 0; i < tokens!.length; i++)
-      if (tokens![i].symbol == token)
+      if (tokens![i].address == tokenAddress)
         index = i;
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     var configurationService = ConfigurationService(_prefs);
@@ -363,7 +372,7 @@ class SendTransactionState extends State<SendTransaction> {
   Future<List<TokenList.Token>> fillTokens() async {
     var res = await TokenList.fetchData(address);
     for(int i = 0; i < res.length; i++)
-      if (!dropdownItems.contains(res[i].symbol)) dropdownItems.add(res[i].symbol);
+      dropdownItems[res[i].address] = res[i].symbol;
     return res;
   }
 
