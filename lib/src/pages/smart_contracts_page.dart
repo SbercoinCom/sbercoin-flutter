@@ -36,7 +36,7 @@ class SmartContractPageState extends State<SmartContractPage> {
 
   double _feeValue = 0.003;
   double _gasLimitValue = 200000;
-  double _gasPriceValue = 20;
+  double _gasPriceValue = 3;
 
   @override
   void initState() {
@@ -218,9 +218,9 @@ class SmartContractPageState extends State<SmartContractPage> {
                           (abi[dropdownItems.indexOf(dropdownValue)].stateMutability != 'view') ? Text(AppLocalizations.of(context)!.gasPrice_greph_per_gas) : Text(''),
                           (abi[dropdownItems.indexOf(dropdownValue)].stateMutability != 'view') ? Slider(
                             value: _gasPriceValue,
-                            min: 18,
-                            max: 40,
-                            divisions: 22,
+                            min: 1,
+                            max: 30,
+                            divisions: 5,
                             label: _gasPriceValue.round().toString(),
                             activeColor: Color.fromRGBO(26, 159, 41, 1.0),
                             inactiveColor: Color.fromRGBO(26, 159, 41, 0.3),
@@ -359,15 +359,15 @@ class SmartContractPageState extends State<SmartContractPage> {
         totalValue += inputs[i].value;
       }
 
-      var chunks = List<dynamic>.generate(6, (_) => null);
-      chunks[0] = OPS['OP_4'];
-      chunks[1] = number2Buffer(_gasLimitValue.toInt());
-      chunks[2] = number2Buffer(_gasPriceValue.toInt());
-      chunks[3] = Uint8List.fromList(HEX.decode(encodeData()));
-      chunks[4] = Uint8List.fromList(HEX.decode(addressController.text));
-      chunks[5] = 0xc2; //OP_CALL
+      var contract =  compile([
+        OPS['OP_4'],
+        number2Buffer(_gasLimitValue.toInt()),
+        (_gasPriceValue.toInt() > 16) ? number2Buffer(_gasPriceValue.toInt()) : Uint8List.fromList([_gasPriceValue.toInt(), 0]),
+        Uint8List.fromList(HEX.decode(encodeData())),
+        Uint8List.fromList(HEX.decode(addressController.text)),
+        0xc2 //OP_CALL
+      ]);
 
-      var contract =  compile(chunks);
       txb.addOutput(contract, (double.parse(valueController.text) * CONSTANTS.SBER_DECIMALS).toInt());
 
       if (totalValue > fee)

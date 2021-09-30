@@ -47,7 +47,7 @@ class SendTransactionState extends State<SendTransaction> {
 
   double _feeValue = 0.003;
   double _gasLimitValue = 200000;
-  double _gasPriceValue = 20;
+  double _gasPriceValue = 3;
   bool? addressValidator;
   bool? valueValidator;
 
@@ -208,9 +208,9 @@ class SendTransactionState extends State<SendTransaction> {
                     if (dropdownValue != 'SBER') Text(AppLocalizations.of(context)!.gasPrice_greph_per_gas),
                     if (dropdownValue != 'SBER') Slider(
                       value: _gasPriceValue,
-                      min: 18,
-                      max: 40,
-                      divisions: 22,
+                      min: 1,
+                      max: 30,
+                      divisions: 29,
                       label: _gasPriceValue.round().toString(),
                       activeColor: Color.fromRGBO(26, 159, 41, 1.0),
                       inactiveColor: Color.fromRGBO(26, 159, 41, 0.3),
@@ -343,16 +343,15 @@ class SendTransactionState extends State<SendTransaction> {
         totalValue += inputs[i].value;
       }
 
-      var chunks = List<dynamic>.generate(6, (_) => null);
-      
-      chunks[0] = OPS['OP_4'];
-      chunks[1] = number2Buffer(_gasLimitValue.toInt());
-      chunks[2] = number2Buffer(_gasPriceValue.toInt());
-      chunks[3] = Uint8List.fromList(HEX.decode(transfer + receiverAddress + value));
-      chunks[4] = Uint8List.fromList(HEX.decode(tokens![index].address));
-      chunks[5] = 0xc2; //OP_CALL
+      var contract =  compile([
+        OPS['OP_4'],
+        number2Buffer(_gasLimitValue.toInt()),
+        (_gasPriceValue.toInt() > 16) ? number2Buffer(_gasPriceValue.toInt()) : Uint8List.fromList([_gasPriceValue.toInt(), 0]),
+        Uint8List.fromList(HEX.decode(transfer + receiverAddress + value)),
+        Uint8List.fromList(HEX.decode(tokens![index].address)),
+        0xc2 //OP_CALL
+      ]);
 
-      var contract =  compile(chunks);
       txb.addOutput(contract, 0);
 
       if (totalValue > fee)

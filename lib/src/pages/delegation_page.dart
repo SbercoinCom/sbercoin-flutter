@@ -179,7 +179,7 @@ class DelegationState extends State<Delegation> {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     var configurationService = ConfigurationService(_prefs);
     final keyPair = BitcoinLibrary.ECPair.fromWIF(configurationService.getWIF()!, network: CONSTANTS.sbercoinNetwork);
-    final fee = (0.001 * CONSTANTS.SBER_DECIMALS).toInt() + 20 * 2500000;
+    final fee = (0.001 * CONSTANTS.SBER_DECIMALS).toInt() + 1 * 2500000;
     var totalValue = 0;
     var encodedData;
     if (isDelegationRemoving) {
@@ -212,15 +212,15 @@ class DelegationState extends State<Delegation> {
         totalValue += inputs[i].value;
       }
 
-      var chunks = List<dynamic>.generate(6, (_) => null);
-      chunks[0] = OPS['OP_4'];
-      chunks[1] = number2Buffer(2500000);
-      chunks[2] = number2Buffer(20);
-      chunks[3] = Uint8List.fromList(HEX.decode(encodedData));
-      chunks[4] = Uint8List.fromList(HEX.decode('0000000000000000000000000000000000000086'));
-      chunks[5] = 0xc2; //OP_CALL
+      var contract = compile([
+        OPS['OP_4'],
+        number2Buffer(2500000),
+        Uint8List.fromList([1, 0]),
+        Uint8List.fromList(HEX.decode(encodedData)),
+        Uint8List.fromList(HEX.decode('0000000000000000000000000000000000000086')),
+        0xc2 //OP_CALL
+      ]);
 
-      var contract = compile(chunks);
       txb.addOutput(contract, 0);
 
       if (totalValue > fee)
