@@ -220,7 +220,7 @@ class SmartContractPageState extends State<SmartContractPage> {
                             value: _gasPriceValue,
                             min: 1,
                             max: 30,
-                            divisions: 5,
+                            divisions: 29,
                             label: _gasPriceValue.round().toString(),
                             activeColor: Color.fromRGBO(26, 159, 41, 1.0),
                             inactiveColor: Color.fromRGBO(26, 159, 41, 0.3),
@@ -344,7 +344,7 @@ class SmartContractPageState extends State<SmartContractPage> {
     var configurationService = ConfigurationService(_prefs);
     final keyPair = ECPair.fromWIF(configurationService.getWIF()!, network: CONSTANTS.sbercoinNetwork);
     final address = Wallet.fromWIF(configurationService.getWIF()!, CONSTANTS.sbercoinNetwork).address;
-    var fee = (_feeValue * CONSTANTS.SBER_DECIMALS).toInt() + _gasLimitValue.toInt()*_gasPriceValue.toInt();
+    var fee = (_feeValue * CONSTANTS.SBER_DECIMALS).toInt() + _gasLimitValue.toInt() * _gasPriceValue.toInt();
     var totalValue = 0;
     List<UTXO> inputs = await selectP2SHUtxos(context, address, 0, fee);
                 
