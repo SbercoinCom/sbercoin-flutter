@@ -384,7 +384,8 @@ class SendTransactionState extends State<SendTransaction> {
     if (result != null && result != []) {
       setState(() {
         addressController = TextEditingController(text: result[0]);
-        valueController = TextEditingController(text: result[1]);
+        if (result[1] != null)
+          valueController = TextEditingController(text: result[1]);
       });
     }
   }

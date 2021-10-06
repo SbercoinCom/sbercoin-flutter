@@ -49,10 +49,14 @@ class QRScannerState extends State<QRScannerPage> {
     controller.scannedDataStream.listen((scanData) {
       if (!scanned) {
         scanned = true;
+        print(scanData.code);
         if (scanData.code.startsWith('sbercoin:')) {
-          //result code should be like `sbercoin:SSfbCTSoYnSAsVtXhLA7WyNuH22Cs8LTwp?amount=1.0&message=`
+          //result code should be like `sbercoin:SSfbCTSoYnSAsVtXhLA7WyNuH22Cs8LTwp?amount=1.0&message=` or just `sbercoin:SSfbCTSoYnSAsVtXhLA7WyNuH22Cs8LTwp`
           res.add(scanData.code.substring(9, (9+34)));
-          res.add(scanData.code.split('&')[0].substring(9+34+8));
+          if (scanData.code.substring(0, 9+34).startsWith('?amount'))
+            res.add(scanData.code.split('&')[0].substring(9+34+8));
+          else
+            res.add(null);
         }
         Navigator.of(context).pop(res);
       }
